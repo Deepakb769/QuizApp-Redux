@@ -1,32 +1,46 @@
 import React from 'react'
-import Think from '../../assets/images/Group.png'
+import '../../assets/styles/signup.css'
+import Think from '../../assets/images/Think.png'
 
 const Signup = () => {
   // const [name, setName]
   return (
     <>
-      <div className="flex">
-        <div className="signup-brain">
-          <img src={Think} alt="" />
+      <div className="flex justify-center items-center min-h-screen gap-38 signup max-w">
+        <div className="signup-brain p-8 rounded-2xl shadow-lg w-full max-w-md">
+          <img src={Think} className='brain' alt="" />
         </div>
-        <div className="signup-form">
-          <form>
-            <label htmlFor="">Full Name</label>
-            <input
-              type="text"
-              placeholder='Full Name'
-            />
-            <label htmlFor="">Email</label>
-            <input
-              type="text"
-              placeholder='Full Name'
-            />
-            <label htmlFor="">Password</label>
-            <input
-              type="text"
-              placeholder='Full Name'
-            />
-            <button>Login</button>
+        <div className="signup-form text-start">
+          <h1>Signup</h1>
+          <form className='flex flex-col'>
+            <div>
+              <div>
+                <label className='mr-8'>Full Name</label>
+                <input
+                  className='leading-normal'
+                  type="text"
+                  placeholder='Full Name'
+                />
+              </div>
+              <div>
+                <label className='mr-8'>Email</label>
+                <input
+                  className='leading-normal'
+                  type="text"
+                  placeholder='Full Name'
+                />
+              </div>
+              <div>
+                <label className='mr-8'>Password</label>
+                <input
+                  className='leading-normal'
+                  type="text"
+                  placeholder='Full Name'
+                />
+              </div>
+            </div>
+
+            <button className='leading-normal w-full'>Signup</button>
           </form>
         </div>
       </div>
