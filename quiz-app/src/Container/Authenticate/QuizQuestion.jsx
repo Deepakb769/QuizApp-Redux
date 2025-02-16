@@ -1,55 +1,107 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import '../../assets/styles/quizquestion.css';
+import { useNavigate } from 'react-router-dom';
 
 const QuizQuestion = () => {
-    const [question, setQuestion] = useState([]);
+    const [questions, setQuestions] = useState([]);
     const [currentQuestIndex, setCurrentQuestIndex] = useState(0);
+    const [selectedOption, setSelectedOption] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
 
+    const navigate = useNavigate();
+
+    // Initialize or load questions from localStorage
     useEffect(() => {
-        const storedQuestion = JSON.parse(localStorage.getItem('questions'))
-        const storeIndex = parseInt(localStorage.getItem('currentQuestIndex')) || 0;
+        // Load or initialize questions
+        const storedQuestions = JSON.parse(localStorage.getItem('questions'));
+        const storedIndex = parseInt(localStorage.getItem('currentQuestIndex')) || 0;
 
-        if(!storedQuestion){
-            const defaultQuestion = Array.from({ length : 10 }, (_,index) => ({
-              id : index + 1,
-              questionText: index === 0 ? "Who is the director of Man of Steel?" : `Question ${index + 1}`,
-              supportingText: index === 0 ? "Supporting Text" : `Supporting Text for question ${index + 1}`
-            })) 
+        if (!storedQuestions) {
+            // Create default questions if none exist
+            const defaultQuestions = Array.from({ length: 10 }, (_, index) => ({
+                id: index + 1,
+                questionText: index === 0 ? "Who is the director of Man of Steel?" : `Question ${index + 1}`,
+                supportingText: index === 0 ? "Supporting Text" : `Supporting Text for question ${index + 1}`,
+                options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            }));
 
-            localStorage.setItem('questions', JSON.stringify(defaultQuestion));
-            setQuestion(defaultQuestion)
-          }
-          else{
-            setQuestion(storedQuestion);
+            localStorage.setItem('questions', JSON.stringify(defaultQuestions));
+            setQuestions(defaultQuestions)
+        } else {
+            setQuestions(storedQuestions);
         }
 
-        setCurrentQuestIndex(storeIndex);
+        setCurrentQuestIndex(storedIndex);
         setIsLoaded(true);
-    },[])
+    }, []);
+
+    const handleOptionSelect = (optionIndex) => {
+        setSelectedOption(optionIndex);
+    };
 
     const handleNext = () => {
-        if(currentQuestIndex < question.length - 1){
+        if (currentQuestIndex < questions.length - 1) {
             const newIndex = currentQuestIndex + 1;
             setCurrentQuestIndex(newIndex);
-            localStorage.setItem('currentQuestIndex',newIndex.toString())
+            setSelectedOption(null);
+            localStorage.setItem('currentQuestIndex', newIndex.toString());
         }
-    } 
+        else {
+            localStorage.removeItem('currentQuestIndex')
+            console.log('Navigating to Leaderboard')
+            navigate('/leaderboard')
+        }
+    };
 
-    if(!isLoaded || question.length === 0) return <div>Loading...</div>
+    if (!isLoaded || questions.length === 0) {
+        return <div>Loading...</div>;
+    }
 
-  return (
-    <>
-      <div className="leaderboard-title">
-        <h1>Questions {currentQuestIndex + 1} of {question.length}</h1>
-      </div>
-      
-      <div className="question-cards">
-        <h2>{question[currentQuestIndex]?.questionText}</h2>
-        <p>{question[currentQuestIndex]?.supportingText}</p>
-      </div>
-      <button onClick={handleNext} disabled={currentQuestIndex >= question.length - 1}>Submit & Continue</button>
-    </>
-  )
-}
+    return (
+        <div className="quiz-container">
+            <header>
+                <h1>techpasthshala</h1>
+            </header>
 
-export default QuizQuestion
+            <div className="progress-indicator">
+                Question {currentQuestIndex + 1} of {questions.length}
+            </div>
+
+            <div className="question-card">
+                <h2>{questions[currentQuestIndex]?.questionText}</h2>
+                <p className="supporting-text">{questions[currentQuestIndex]?.supportingText}</p>
+
+                <div className="options-container">
+                    {questions[currentQuestIndex].options?.map((option, index) => (
+                        <div
+                            key={index}
+                            className={`option ${selectedOption === index ? 'selected' : ''}`}
+                            onClick={() => handleOptionSelect(index)}
+                        >
+                            <input
+                                type="radio"
+                                name="answer"
+                                id={`option${index}`}
+                                checked={selectedOption === index}
+                                onChange={() => handleOptionSelect(index)}
+                            />
+                            <label htmlFor={`option${index}`}>
+                                {index + 1}. {option}
+                            </label>
+                        </div>
+                    ))}
+                </div>
+
+                <button
+                    className="submit-button"
+                    onClick={handleNext}
+                // disabled={selectedOption === null}
+                >
+                    {currentQuestIndex === questions.length - 1 ? 'Submit' : 'Submit & Continue →'}
+                </button>
+            </div>
+        </div>
+    );
+};
+
+export default QuizQuestion;

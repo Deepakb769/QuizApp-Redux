@@ -2,3 +2,22 @@
     align-items: center;
     line-height: 5;
 }
+
+/* input{
+    width: 440px;
+} */
+.login-form input{
+    width: 440px;
+    height: 50px;
+    border-radius: 10px;
+    padding: 0 1.5rem;
+} 
+
+.login-btn{
+    background-color: rgba(243, 189, 0, 1);
+    border-radius: 100px;
+}
+
+#login-email, #login-password{
+    flex-direction: column;
+}

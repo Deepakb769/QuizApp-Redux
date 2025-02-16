@@ -1,4 +1,20 @@
 .flex-col{
     align-items: center;
-    line-height: 5;
+    line-height: 3;
+}
+
+.signup-form input{
+    width: 440px;
+    height: 50px;
+    border-radius: 10px;
+    padding: 0 1.5rem;
+}
+
+.signup-btn{
+    background-color: rgba(243, 189, 0, 1);
+    border-radius: 100px;
+}
+
+#first-name, #email, #password{
+    flex-direction: column;
 }
