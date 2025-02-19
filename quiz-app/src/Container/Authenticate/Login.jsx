@@ -2,7 +2,7 @@ import React from 'react'
 import '../../assets/styles/login.css'
 import Think from '../../assets/images/Think.png'
 import { Link, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 import { useState } from 'react'
 
 const Login = () => {
@@ -23,18 +23,30 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if(formData.email && formData.password){
-            console.log("Success")
-            toast.success("Logged in successfully!")
-            navigate('/quizquestion');
+            const storeDetails = JSON.parse(localStorage.getItem('userDetail')) || [];
+
+            const userArray = Array.isArray(storeDetails) ? storeDetails : [];
+
+            const exsistUser = userArray.find(user => user.email === formData.email && user.password === formData.password);
+
+            if(exsistUser){
+                console.log("Success")
+                toast.success("Logged in successfully!")
+                console.log("Logged in successfully!")
+                navigate('/quizquestion');
+            }else{
+                toast.error("Invalid email or password")
+                console.log("Invalid email or password")
+            }
         }
         else{
-            toast.error("please enter and password")
+            toast.error("Please enter and password")
         }
     }
    
     return (
         <>
-            <div className="flex justify-center items-center min-h-screen gap-38 signup max-w">
+            <div className="flex justify-center items-center min-h-screen gap-38 login-sec max-w">
                 <div className="signup-brain p-8 rounded-2xl  w-full max-w-md">
                     <img src={Think} className='brain' alt="" />
                 </div>
@@ -43,7 +55,7 @@ const Login = () => {
                     <form className='flex flex-col' onSubmit={handleSubmit} >
                         <div>
                             <div className='flex' id='email'>
-                                <label className='mr-8'>Email</label>
+                                <label className='mr-8'>Email<span style={{color : 'red'}}>*</span></label>
                                 <input
                                     className='leading-normal border'
                                     onChange={handleChange}
@@ -54,7 +66,7 @@ const Login = () => {
                                 />
                             </div>
                             <div className='flex' id='email'>
-                                <label className='mr-8'>Password</label>
+                                <label className='mr-8'>Password<span style={{color : 'red'}}>*</span></label>
                                 <input
                                     className='leading-normal border'
                                     onChange={handleChange}
@@ -70,6 +82,7 @@ const Login = () => {
                     </form>
                 </div>
             </div>
+            <ToastContainer />
         </>
     )
 }

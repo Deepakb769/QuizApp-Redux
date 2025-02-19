@@ -5,24 +5,19 @@ import Login from './Container/Authenticate/Login'
 import QuizQuestion from './Container/Authenticate/QuizQuestion'
 import Leaderboard from './Container/Authenticate/Leaderboard'
 import { useState } from 'react'
+import Navbar from './Components/Navbar'
 
 function App() {
   
 
-  return (
-    // <>
-    //   <Signup />
-    //   <Login/>
-    //   <QuizQuestion />
-    //   <Leaderboard />
-    // </>
-    
+  return ( 
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Signup/>}/>
           <Route path='/login' element={<Login/>}/>
           <Route path='/quizquestion' element={<QuizQuestion/>}/>
           <Route path='/leaderboard' element={<Leaderboard/>}/>
+          <Route path='/navbar' element={<Navbar />} />
         </Routes>
       </BrowserRouter>
     

@@ -1,3 +1,23 @@
+.quiz-container{
+    margin: 0;
+    line-height: 50px;
+}
+
+.progress-indicator{
+    font-size: 42px;
+    font-weight: 600;
+}
+
 .question-cards h2{
-    font-size: 30px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.option {
+    font-weight: 600;
+}
+
+.submit-button{
+    position: absolute;
+    right: 0;
 }

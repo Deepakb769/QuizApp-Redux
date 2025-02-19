@@ -1,0 +1,91 @@
+.leaderboard-container{
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.leaderboard-container h4{
+    font-size: 35px;
+}
+
+.rank-card h5, .rank-rows h5{
+    font-size: 30px; 
+}
+
+.rank-card {
+    display: flex;
+    gap: 60px;
+}
+
+#rank-1{
+    position: relative;
+    z-index: 1;
+}
+
+#rank-1 h5 {
+    position: relative;
+    bottom: 340px;
+    left: 66px;
+    z-index: 99;
+}
+
+#rank-1 p {
+    position: relative;
+    bottom: 340px;
+    left: 85px;
+    z-index: 99;
+}
+
+#rank-2 {
+    position: relative;
+    top: 140px;
+    z-index: 1;
+} 
+
+#rank-2 h4{
+    position: relative;
+    bottom: 550px;
+    left: 95px;
+    z-index: 99;
+}
+
+#rank-2 h5 {
+    position: relative;
+    bottom: 367px;
+    left: 60px;
+    z-index: 99;
+}
+
+#rank-2 p {
+    position: relative;
+    bottom: 367px;
+    left: 80px;
+    z-index: 99;
+}
+
+#rank-3{
+    position: relative;
+    top: 200px;
+    z-index: 1;
+}
+
+
+#rank-3 h4{
+    position: relative;
+    bottom: 480px;
+    left: 95px;
+    z-index: 99;
+}
+
+#rank-3 h5 {
+    position: relative;
+    bottom: 327px;
+    left: 76px;
+    z-index: 99;
+}
+
+#rank-3 p {
+    position: relative;
+    bottom: 330px;
+    left: 97px;
+    z-index: 99;
+}

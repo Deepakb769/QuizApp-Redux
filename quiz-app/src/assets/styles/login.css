@@ -3,6 +3,12 @@
     line-height: 5;
 }
 
+.login-sec{
+    max-width: 1050px;
+    margin: 0 auto;
+    /* margin-top: 200px; */
+}
+
 /* input{
     width: 440px;
 } */

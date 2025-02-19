@@ -21,7 +21,16 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
     if(formData.firstName && formData.email && formData.password){
+      const storeDetails = JSON.parse(localStorage.getItem('userDetail')) || []
+
+      const validStoreDetails = Array.isArray(storeDetails) ? storeDetails : [];
+
+      const userUpdated = [...validStoreDetails, formData]
+
+      localStorage.setItem('userDetail', JSON.stringify(userUpdated))
+
       toast.success('Signup Successfull')
       setFormData({
         firstName : '',
@@ -34,20 +43,19 @@ const Signup = () => {
     }
   }
 
-  
-
   return (
     <>
-      <div className="flex justify-center items-center min-h-screen gap-38 signup max-w">
+      <div className="flex justify-center items-center min-h-screen gap-38 signup-sec max-w">
         <div className="signup-brain p-8 rounded-2xl  w-full max-w-md">
           <img src={Think} className='brain' alt="" />
         </div>
         <div className="signup-form text-start">
           <h1>Signup</h1>
+          <p>Sign Up to join</p>
           <form className='signup-form flex flex-col' onSubmit={handleSubmit}>
             <div>
               <div className='flex' id='first-name'>
-                <label className='mr-8'>Full Name</label>
+                <label className='mr-8'>Full Name<span style={{color : 'red'}}>*</span></label>
                 <input
                   className='leading-normal border'
                   type="text"
@@ -58,7 +66,7 @@ const Signup = () => {
                 />
               </div>
               <div className='flex' id='email'>
-                <label className='mr-8'>Email</label>
+                <label className='mr-8'>Email<span style={{color : 'red'}}>*</span></label>
                 <input
                   className='leading-normal border'
                   type="email"
@@ -69,7 +77,7 @@ const Signup = () => {
                 />
               </div>
               <div className='flex' id='password'>
-                <label className='mr-8'>Password</label>
+                <label className='mr-8'>Password<span style={{color : 'red'}}>*</span></label>
                 <input
                   className='leading-normal border '
                   type="password"
@@ -86,7 +94,7 @@ const Signup = () => {
         </div>
       </div>
 
-      <ToastContainer position="center" autoClose = {3000} />
+      <ToastContainer />
     </>
   )
 }
