@@ -1,0 +1,142 @@
+{
+    "users" : [
+        {
+            "firstName" : "Deepak",
+            "email" : "dipakbhora321@gmail.com",
+            "password" : "123456789"
+        },
+        {
+            "firstName" : "Parikshit",
+            "email" : "pari321@gmail.com",
+            "password" : "987654321"
+        },
+        {
+            "firstName" : "Gopal",
+            "email" : "gopi67@gmail.com",
+            "password" : "129834765"
+        }
+    ],
+
+    "questions": [
+        {
+            "id": 1,
+            "questionText": "Who directed the movie 'Inception'?",
+            "supportingText": "Hint: He also directed 'Interstellar'.",
+            "options": [
+                "Steven Spielberg",
+                "Christopher Nolan",
+                "James Cameron",
+                "Quentin Tarantino"
+            ],
+            "correctAnswer": "Christopher Nolan"
+        },
+        {
+            "id": 2,
+            "questionText": "What is the capital of France?",
+            "supportingText": "A famous city for romance and art.",
+            "options": [
+                "Rome",
+                "Berlin",
+                "Madrid",
+                "Paris"
+            ],
+            "correctAnswer": "Christopher Nolan"
+        },
+        {
+            "id": 3,
+            "questionText": "Which planet is known as the Red Planet?",
+            "supportingText": "It is named after the Roman god of war.",
+            "options": [
+                "Earth",
+                "Mars",
+                "Jupiter",
+                "Venus"
+            ],
+            "correctAnswer": "Mars"
+        },
+        {
+            "id": 4,
+            "questionText": "Who wrote 'To Kill a Mockingbird'?",
+            "supportingText": "A classic novel about racial injustice.",
+            "options": [
+                "J.K. Rowling",
+                "Harper Lee",
+                "Jane Austen",
+                "Mark Twain"
+            ],
+            "correctAnswer": "Harper Lee"
+        },
+        {
+            "id": 5,
+            "questionText": "What is the hardest natural substance on Earth?",
+            "supportingText": "It is often used in jewelry.",
+            "options": [
+                "Gold",
+                "Platinum",
+                "Diamond",
+                "Silver"
+            ],
+            "correctAnswer": "Diamond"
+        },
+        {
+            "id": 6,
+            "questionText": "Which country is famous for the Great Wall?",
+            "supportingText": "A historical wonder of the world.",
+            "options": [
+                "India",
+                "China",
+                "Egypt",
+                "Brazil"
+            ],
+            "correctAnswer": "China"
+        },
+        {
+            "id": 7,
+            "questionText": "What is the smallest prime number?",
+            "supportingText": "It is the only even prime number.",
+            "options": [
+                "1",
+                "2",
+                "3",
+                "5"
+            ],
+            "correctAnswer": "2"
+        },
+        {
+            "id": 8,
+            "questionText": "Who painted the Mona Lisa?",
+            "supportingText": "The artist was also an inventor.",
+            "options": [
+                "Pablo Picasso",
+                "Vincent van Gogh",
+                "Leonardo da Vinci",
+                "Claude Monet"
+            ],
+            "correctAnswer": "Leonardo da Vinci"
+        },
+        {
+            "id": 9,
+            "questionText": "What is the chemical symbol for water?",
+            "supportingText": "It consists of two elements.",
+            "options": [
+                "O2",
+                "CO2",
+                "H2O",
+                "NaCl"
+            ],
+            "correctAnswer": "H20"
+        },
+        {
+            "id": 10,
+            "questionText": "Which continent is the largest by area?",
+            "supportingText": "It is home to China and India.",
+            "options": [
+                "Africa",
+                "North America",
+                "Asia",
+                "Europe"
+            ],
+            "correctAnswer": "Asia"
+        }
+    ]
+}

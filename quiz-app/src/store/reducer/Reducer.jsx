@@ -4,38 +4,67 @@ import {
     SET_SELECTED_OPTION,
     RESET_QUIZ,
     loadQuestions,
+    UPDATE_SCORE,
     loadCurrentQuestIndex,
+    SIGNUP_USER,
+    LOGIN_USER,
+    LOGOUT_USER,
 } from '../action/Action'
 
 const initialState = {
-    questions : loadQuestions(),
-    currentQuestIndex : loadCurrentQuestIndex(),
-    selectedOption : null,
+    questions: [],
+    currentQuestIndex: loadCurrentQuestIndex(),
+    selectedOption: null,
+    score: 0
 }
 
 const quizReducer = (state = initialState, action) => {
-    switch(action.type){
-        case SET_QUESTIONS :
+    switch (action.type) {
+        case SIGNUP_USER:
             return {
                 ...state,
-                questions : action.payload
+                users: [...state.users, action.payload]
+            }
+        case LOGIN_USER:
+            return { 
+                ...state,
+                currentUser: action.payload 
             };
-        case SET_CURRENT_QUEST_INDEX :
-            return{
+        case SET_QUESTIONS:
+            return {
                 ...state,
-                currentQuestIndex : action.payload
-            }
-        case SET_SELECTED_OPTION :
-            return{
+                questions: action.payload
+            };
+        case SET_CURRENT_QUEST_INDEX:
+            return {
                 ...state,
-                selectedOption : action.payload
+                currentQuestIndex: action.payload
             }
-        case RESET_QUIZ :
-            return{
+        case SET_SELECTED_OPTION:
+            return {
                 ...state,
-                currentQuestIndex : 0
+                selectedOption: action.payload
             }
-        default :
+        case RESET_QUIZ:
+            return {
+                initialState,
+                questions: state.questions,
+                score: 0,
+                // ...state,
+                // currentQuestIndex : 0
+
+            }
+        case UPDATE_SCORE:
+            return {
+                ...state,
+                score: state.score + action.payload
+            }
+        case LOGOUT_USER:
+            return { 
+                ...state, 
+                currentUser: null 
+            };
+        default:
             return state
     }
 }

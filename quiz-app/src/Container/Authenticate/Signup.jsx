@@ -4,8 +4,11 @@ import Think from '../../assets/images/Think.png'
 import {ToastContainer, toast } from 'react-toastify'
 import { Link } from 'react-router-dom'
 import Login from './Login'
+import { useDispatch } from 'react-redux'
+import { signupUser } from '../../store/action/Action'
 
 const Signup = () => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     firstName : '',
     email : '',
@@ -23,14 +26,7 @@ const Signup = () => {
     e.preventDefault();
     
     if(formData.firstName && formData.email && formData.password){
-      const storeDetails = JSON.parse(localStorage.getItem('userDetail')) || []
-
-      const validStoreDetails = Array.isArray(storeDetails) ? storeDetails : [];
-
-      const userUpdated = [...validStoreDetails, formData]
-
-      localStorage.setItem('userDetail', JSON.stringify(userUpdated))
-
+      dispatch(signupUser(formData));
       toast.success('Signup Successfull')
       setFormData({
         firstName : '',

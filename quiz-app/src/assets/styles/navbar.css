@@ -1,0 +1,10 @@
+
+
+.quiz-nav{
+    justify-content: space-between;
+    padding: 15px 50px;
+}
+
+.title-logo img {
+    width: 15rem;
+}
