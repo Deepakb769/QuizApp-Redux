@@ -7,15 +7,21 @@ import {
     UPDATE_SCORE,
     loadCurrentQuestIndex,
     SIGNUP_USER,
-    LOGIN_USER,
-    LOGOUT_USER,
+    LOGIN_REQUEST,
+    LOGIN_SUCCESS,
+    LOGIN_FAILURE,
+    // LOGIN_USER,
+    // LOGOUT_USER,
 } from '../action/Action'
 
 const initialState = {
     questions: [],
     currentQuestIndex: loadCurrentQuestIndex(),
     selectedOption: null,
-    score: 0
+    score: 0,
+    email: null,
+    loading: false,
+    error: null,
 }
 
 const quizReducer = (state = initialState, action) => {
@@ -25,11 +31,24 @@ const quizReducer = (state = initialState, action) => {
                 ...state,
                 users: [...state.users, action.payload]
             }
-        case LOGIN_USER:
-            return { 
+        case LOGIN_REQUEST:
+            return {
                 ...state,
-                currentUser: action.payload 
+                loading: true,
+                error: null,
             };
+        case LOGIN_SUCCESS: 
+            return {
+                ...state,
+                loading: false,
+                email : action.payload,
+            };
+        case LOGIN_FAILURE:
+            return {
+                ...state,
+                loading : false,
+                error : action.payload,
+            }
         case SET_QUESTIONS:
             return {
                 ...state,
@@ -60,9 +79,9 @@ const quizReducer = (state = initialState, action) => {
                 score: state.score + action.payload
             }
         case LOGOUT_USER:
-            return { 
-                ...state, 
-                currentUser: null 
+            return {
+                ...state,
+                currentUser: null
             };
         default:
             return state

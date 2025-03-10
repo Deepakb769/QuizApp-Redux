@@ -1,20 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../../assets/styles/login.css'
 import Think from '../../assets/images/Think.png'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast, ToastContainer } from 'react-toastify'
 import { useState } from 'react'
+import { loginRequest } from '../../store/users/userActions'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginUser } from '../../store/action/Action'
+// import { loginUser } from '../../store/action/Action'
+import "react-toastify/ReactToastify.css";
 
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    // const { currentUser } = useSelector((state) => state)
+    const { loading, error, user } = useSelector((state) => state.user)
     const [formData, setFormData] = useState({
         email: '',
         password: '',
-    })
+    })  
 
     const handleChange = (e) => {
         setFormData({
@@ -23,25 +25,21 @@ const Login = () => {
         })
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(loginUser(formData))
-            .then((user) => {
-            if (user) {
-                console.log("Success")
-                toast.success("Logged in successfully!")
-                console.log("Logged in successfully!")
-                navigate('/quizquestion');
-            } else {
-                toast.error("Invalid email or password")
-                console.log("Invalid email or password")
-            }
+        dispatch(loginRequest(formData.email, formData.password, navigate))
+    };
+
+    useEffect(() => {
+        console.log("Users state:", user)
+    },[user])
+
+    useEffect(() => {
+        if(user){
+            toast.success("Logged in successfully")
+            navigate('/quizQuestion');
         }
-        )
-        // else{
-        //     toast.error("Please enter and password")
-        // }
-    }
+    }, [user, navigate])
 
 return (
     <>
@@ -77,8 +75,11 @@ return (
                             />
                         </div>
                     </div>
-                    <button className='login-btn leading-normal mt-8 w-full'>Login</button>
+                    <button className='login-btn leading-normal mt-8 w-full' >
+                        { loading ? "Loading in..." : "Login"}</button>
+                    <p>New here? <Link to="/">Register here!</Link></p>
                 </form>
+                {error && <p style={{color : "red"}}>{error}</p>}
             </div>
         </div>
         <ToastContainer />

@@ -40,7 +40,7 @@
                 "Madrid",
                 "Paris"
             ],
-            "correctAnswer": "Christopher Nolan"
+            "correctAnswer": "Paris"
         },
         {
             "id": 3,
@@ -124,7 +124,7 @@
                 "H2O",
                 "NaCl"
             ],
-            "correctAnswer": "H20"
+            "correctAnswer": "H2O"
         },
         {
             "id": 10,
