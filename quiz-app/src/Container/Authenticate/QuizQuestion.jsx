@@ -17,7 +17,8 @@ import { toast } from 'react-toastify';
 const QuizQuestion = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { users, score, questions, currentQuestIndex, selectedOption, loading, error } = useSelector((state) => state.quiz);
+    const {user} = useSelector((state) => state.user);
+    const { score, questions, currentQuestIndex, selectedOption, loading, error } = useSelector((state) => state.quiz);
 
     useEffect(() => {
         dispatch(fetchQuestions());
@@ -72,6 +73,9 @@ const QuizQuestion = () => {
             if (currentQuestIndex < questions.length - 1) {
                 dispatch(setCurrentQuestIndex(currentQuestIndex + 1));
             } else {
+                dispatch(saveUserScore(user, score))
+                console.log(saveUserScore)
+                dispatch(resetQuiz())
                 navigate('/leaderboard');
             }
         }

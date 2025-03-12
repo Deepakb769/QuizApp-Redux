@@ -1,5 +1,5 @@
 import { takeLatest, call, put } from "redux-saga/effects";
-import { LOGIN_REQUEST, FETCH_LEADERBOARD_REQUEST, UPDATE_LEADERBOARD, loginSuccess, loginFailure } from "./userActions";
+import { LOGIN_REQUEST, FETCH_LEADERBOARD_REQUEST, FETCH_LEADERBOARD_SUCCESS ,UPDATE_LEADERBOARD, loginSuccess, loginFailure } from "./userActions";
 import axios from "axios";
 
 function* loginUserSaga(action){
@@ -30,35 +30,16 @@ function* loginUserSaga(action){
     }
 }
 
+// userSaga.js
 function* fetchLeaderboardSaga() {
     try {
-      const response = yield call(axios.get, "http://localhost:5000/leaderboard");
-      yield put({ type: UPDATE_LEADERBOARD, payload: response.data });
+      const response = yield call(axios.get, "http://localhost:5000/users");
+      const sortedLeaderboard = response.data.sort((a, b) => b.score - a.score);
+      yield put({ type: "FETCH_LEADERBOARD_SUCCESS", payload: sortedLeaderboard });
     } catch (error) {
       console.log("Failed to fetch leaderboard:", error);
     }
   }
-
-
-// function* loginUserSaga(action) {
-//     try {
-//         const response = yield call(() => axios.get(`http://localhost:5000/users?email=${action.payload.email}`));
-//         const users = response.data;
-
-//         // Manually find the user by email
-//         const user = users.find(u => u.email === action.payload.email);
-
-//         if (user && user.password === action.payload.password) {
-//             yield put(loginSuccess(user)); // dispatch success action
-//         } else {
-//             yield put(loginFailure("Invalid email or password"));
-//         }
-//     } catch (error) {
-//         console.log(error);
-//         yield put(loginFailure("Error while logging in"));
-//     }
-// }
-
 
 export function* watchLogin(){
     yield takeLatest(LOGIN_REQUEST, loginUserSaga)

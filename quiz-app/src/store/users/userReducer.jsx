@@ -4,11 +4,12 @@ import {
     LOGIN_FAILURE,
     UPDATE_SCORE,
     UPDATE_LEADERBOARD,
+    FETCH_LEADERBOARD_SUCCESS,
     LOGOUT_USER
 } from './userActions'
 
 const initialState = {
-    users: null,
+    user: null,
     loading: false,
     error: null,
     score: 0,
@@ -28,7 +29,7 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                user: action.payload,
+                user: action.payload || {},
             };
         case LOGIN_FAILURE:
             return {
@@ -39,18 +40,26 @@ const userReducer = (state = initialState, action) => {
         case "UPDATE_SCORE":
             return {
                 ...state,
-                score: state.score + action.payload
+                user : {
+                    ...state.user,
+                    score: action.payload
+                }
             };
         case "UPDATE_LEADERBOARD":
             return {
                 ...state,
                 leaderboard: action.payload
             };
+        case FETCH_LEADERBOARD_SUCCESS:
+            return {
+                ...state,
+                leaderboard: action.payload, // Store sorted leaderboard data
+            };
         case LOGOUT_USER:
             return {
                 ...state,
                 user: null,
-                leaderboard : [],
+                leaderboard: [],
                 isAuthenticated: false,
             };
         default:
