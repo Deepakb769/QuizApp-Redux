@@ -1,4 +1,7 @@
 import {
+    SIGNUP_USER_REQUEST,
+    SIGNUP_USER_SUCCESS,
+    SIGNUP_USER_FAILURE,
     LOGIN_REQUEST,
     LOGIN_SUCCESS,
     LOGIN_FAILURE,
@@ -19,6 +22,25 @@ const initialState = {
 
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
+        case 'SIGNUP_USER_REQUEST':
+            return {
+                ...state,
+                loading: true,
+                error: null
+            };
+        case 'SIGNUP_USER_SUCCESS':
+            return {
+                ...state,
+                loading: false,
+                user: action.payload,
+                error: null
+            };
+        case 'SIGNUP_USER_FAILURE':
+            return {
+                ...state,
+                loading: false,
+                error: action.payload
+            };
         case LOGIN_REQUEST:
             return {
                 ...state,
@@ -40,7 +62,7 @@ const userReducer = (state = initialState, action) => {
         case "UPDATE_SCORE":
             return {
                 ...state,
-                user : {
+                user: {
                     ...state.user,
                     score: action.payload
                 }

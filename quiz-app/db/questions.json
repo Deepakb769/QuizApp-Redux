@@ -1,74 +1,34 @@
 {
   "users": [
     {
-      "id": "1",
-      "firstName": "Deepak",
-      "email": "dipakbhora321@gmail.com",
-      "password": "123456789",
-      "score": 16
+      "id": "684d",
+      "firstName": "Shraddha",
+      "email": "shradha234@gmail.com",
+      "password": "rewq432%#"
     },
     {
-      "id": "2",
+      "id": "e92d",
+      "firstName": "Deepak",
+      "email": "deepakbohora01@gmail.com",
+      "password": "Abts321@"
+    },
+    {
+      "id": "b166",
       "firstName": "Parikshit",
       "email": "pari321@gmail.com",
-      "password": "987654321",
-      "score": 12
+      "password": "apri45$%"
     },
     {
-      "id": "3",
+      "id": "21ba",
       "firstName": "Gopal",
       "email": "gopi67@gmail.com",
-      "password": "129834765",
-      "score": 0
+      "password": "golm90&*"
     },
     {
-      "id": "4",
-      "firstName": "David",
-      "email": "david@example.com",
-      "password": "davidpass321",
-      "score": 0
-    },
-    {
-      "id": "5",
-      "firstName": "Eve",
-      "email": "eve@example.com",
-      "password": "evepass654",
-      "score": 0
-    },
-    {
-      "id": "6",
-      "firstName": "Frank",
-      "email": "frank@example.com",
-      "password": "frankpass987",
-      "score": 0
-    },
-    {
-      "id": "7",
-      "firstName": "Grace",
-      "email": "grace@example.com",
-      "password": "gracepass246",
-      "score": 0
-    },
-    {
-      "id": "8",
-      "firstName": "Hank",
-      "email": "hank@example.com",
-      "password": "hankpass135",
-      "score": 0
-    },
-    {
-      "id": "9",
-      "firstName": "Ivy",
-      "email": "ivy@example.com",
-      "password": "ivypass864",
-      "score": 0
-    },
-    {
-      "id": "10",
-      "firstName": "Jack",
-      "email": "jack@example.com",
-      "password": "jackpass753",
-      "score": 0
+      "id": "1b1e",
+      "firstName": "Sham",
+      "email": "sam45@gmail.com",
+      "password": "sommer45##"
     }
   ],
   "questions": [

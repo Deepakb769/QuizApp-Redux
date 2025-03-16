@@ -5,9 +5,11 @@
   import { Link } from 'react-router-dom'
   import Login from './Login'
   import { useDispatch } from 'react-redux'
-  import { signupUser } from '../../store/action/Action'
+  import { signupUserRequest } from '../../store/users/userActions'
+  // import { signupUser } from '../../'
 
   const Signup = () => {
+
     const dispatch = useDispatch();
     const [formData, setFormData] = useState({
       firstName : '',
@@ -26,7 +28,7 @@
       e.preventDefault();
       
       if(formData.firstName && formData.email && formData.password){
-        dispatch(signupUser(formData));
+        dispatch(signupUserRequest(formData));
         toast.success('Signup Successfull')
         setFormData({
           firstName : '',

@@ -40,12 +40,15 @@ const questionReducer = (state = initialState, action) => {
             return { ...state, loggedInUser: action.payload };
         case RESET_QUIZ:
             return { ...state, score : 0, currentQuestIndex: 0, selectedOption: null };
-        case SAVE_USER_SCORE:
-            return{
-                ...state,
-                users : action.payload.user,
-                score : action.payload.score
-            }
+            case SAVE_USER_SCORE:
+                return {
+                    ...state,
+                    users: state.users.map(u =>
+                        u.email === action.payload.user.email
+                            ? { ...u, score: action.payload.score }
+                            : u
+                    ),
+                };
         default:
             return state;
     }

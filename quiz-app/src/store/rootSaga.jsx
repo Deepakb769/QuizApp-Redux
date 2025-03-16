@@ -3,8 +3,7 @@ import { watchQuestionsSaga } from "./questions/questionSaga";
 import { all } from "axios";
 
 export default function* rootSaga(){
-    yield all([
-        // p
-        // watchQuestionsSaga(),
+    yield all([ 
+        watchSignupUser(),
     ])
 }

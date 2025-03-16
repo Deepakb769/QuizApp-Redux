@@ -1,5 +1,8 @@
 import axios from "axios";
 
+export const SIGNUP_USER_REQUEST = "SIGNUP_USER_REQUEST";
+export const SIGNUP_USER_SUCCESS = "SIGNUP_USER_SUCCESS";
+export const SIGNUP_USER_FAILURE = "SIGNUP_USER_FAILURE";
 export const LOGIN_REQUEST  = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS  = "LOGIN_SUCCESS";
 export const LOGIN_FAILURE  = "LOGIN_FAILURE";
@@ -8,13 +11,23 @@ export const FETCH_LEADERBOARD_REQUEST = "FETCH_LEADERBOARD_REQUEST";
 export const FETCH_LEADERBOARD_SUCCESS = "FETCH_LEADERBOARD_SUCCESS";
 export const UPDATE_LEADERBOARD = "UPDATE_LEADERBOARD";
 export const LOGOUT_USER = "LOGOUT_USER";
-export const SIGNUP_USER_REQUEST  = "SIGNUP_USER_REQUEST"
 
 
-// export const signupUser = (userData) => ({
-//   type : 'SIGNUP_USER_REQUEST',
-//   payload : userData
-// })
+
+export const signupUserRequest = (userData) => ({
+  type: SIGNUP_USER_REQUEST,
+  payload: userData,
+});
+
+export const signupUserSuccess = (user) => ({
+  type: SIGNUP_USER_SUCCESS,
+  payload: user,
+});
+
+export const signupUserFailure = (error) => ({
+  type: SIGNUP_USER_FAILURE,
+  payload: error,
+});
 
 export const loginRequest = (email, password, navigate) => ({
   type: LOGIN_REQUEST,

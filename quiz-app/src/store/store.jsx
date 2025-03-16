@@ -17,7 +17,6 @@ const store = configureStore({
     },
     middleware : (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware)
 });
-
 sagaMiddleware.run(watchLogin)
 
 export default store;

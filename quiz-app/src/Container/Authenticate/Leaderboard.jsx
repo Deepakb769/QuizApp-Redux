@@ -6,6 +6,7 @@ import Second from '../../assets/images/Group 5.png';
 import Third from '../../assets/images/Group 4.png';
 import { FETCH_LEADERBOARD_REQUEST, logoutUser, updateUserScore } from '../../store/users/userActions';
 import { useNavigate } from 'react-router-dom';
+import { saveUserScore } from '../../store/questions/questionAction';
 
 const Leaderboard = () => {
     const dispatch = useDispatch();
@@ -13,7 +14,9 @@ const Leaderboard = () => {
     const { user, score, leaderboard = [] } = useSelector((state) => state.user);
     
     // Get user rank from server data
-    const userRank = leaderboard.findIndex(u => u.email === user?.email) + 1;
+    const sortedLeaderboard = [...leaderboard].sort((a, b) => b.score - a.score);
+    const userRank = sortedLeaderboard.findIndex(u => u.email === user?.email) + 1;
+
 
     useEffect(() => {
         dispatch({ type: FETCH_LEADERBOARD_REQUEST });
@@ -27,7 +30,7 @@ const Leaderboard = () => {
 
     useEffect(() => {
         if (user?.email && score > 0) {
-            dispatch(updateUserScore(user.email, score));
+            dispatch(saveUserScore(user, score));
         }
     }, [score, user?.email, dispatch]);
 
