@@ -1,22 +1,8 @@
 import { takeLatest, call, put } from "redux-saga/effects";
-import { LOGIN_REQUEST, FETCH_LEADERBOARD_REQUEST, SIGNUP_USER_REQUEST, signupUserRequest, UPDATE_LEADERBOARD, signupUserSuccess, signupUserFailure, loginSuccess, loginFailure } from "./userActions";
+import { LOGIN_REQUEST, FETCH_LEADERBOARD_REQUEST, SIGNUP_USER_REQUEST, UPDATE_USER_SCORE, signupUserRequest, UPDATE_LEADERBOARD, signupUserSuccess, signupUserFailure, loginSuccess, loginFailure, fetchLeaderboardSuccess } from "./userActions";
 import axios from "axios";
-import { toast } from "react-toastify";
 
-// const signupApi = async (userData) => {
-//   const res = await axios.get("http://localhost:5000/users");
-//   const existingUsers = res.data;
 
-//   const userExists = existingUsers.some((user) => user.email === userData.email);
-//   if (userExists) {
-//     throw new Error("Email already exists");
-//   }
-
-//   const newUser = { ...userData, id: Date.now().toString(), score: 0 };
-//   await axios.post("http://localhost:5000/users", newUser);
-
-//   return newUser;
-// };
 
 function* signupUserSaga(action) {
   try {
@@ -30,7 +16,7 @@ function* signupUserSaga(action) {
 function* loginUserSaga(action){
     console.log(action)
     try{
-        const { email, password, navigate } = action.payload || {};
+        const { email, password } = action.payload || {};
         const response = yield call(() => 
             axios.get(`http://localhost:5000/users?email=${email}`)
         );
@@ -44,7 +30,7 @@ function* loginUserSaga(action){
         // if(user.length > 0 && user[0].password === password){
         if(user && user.password === password){
             yield put(loginSuccess(user)) // dispatchs success action
-            navigate('/QuizQuestion')
+            // navigate('/QuizQuestion')
         } else {
             yield put(loginFailure("Invalid email or password"))
         }
@@ -56,19 +42,60 @@ function* loginUserSaga(action){
 }
 
 // userSaga.js
+// function* fetchLeaderboardSaga() {
+//     try {
+//       const response = yield call(axios.get, "http://localhost:5000/users");
+//       const sortedData = response.data.sort((a, b) => b.score - a.score);
+//       yield put({ type: "FETCH_LEADERBOARD_SUCCESS", payload: sortedData });
+//     } catch (error) {
+//       console.log("Failed to fetch leaderboard:", error);
+//     }
+//   }
+
 function* fetchLeaderboardSaga() {
-    try {
-      const response = yield call(axios.get, "http://localhost:5000/users");
-      const sortedLeaderboard = response.data.sort((a, b) => b.score - a.score);
-      yield put({ type: "FETCH_LEADERBOARD_SUCCESS", payload: sortedLeaderboard });
-    } catch (error) {
-      console.log("Failed to fetch leaderboard:", error);
-    }
+  try {
+    const response = yield call(axios.get, "http://localhost:5000/users");
+    const sortedData = response.data.sort((a, b) => {
+      // Primary sort: score descending
+      if (b.score !== a.score) return b.score - a.score;
+      // Secondary sort: recent updates first
+      return new Date(b.updatedAt) - new Date(a.updatedAt);
+    });
+
+    yield put(fetchLeaderboardSuccess(sortedData));
+    // yield put({ type: UPDATE_LEADERBOARD, payload: sortedData });
+  } catch (error) {
+    console.log("Failed to fetch leaderboard:", error);
   }
+}
+
+function* updateUserScoreSaga(action) {
+  try {
+      const { email, score } = action.payload;
+      const response = yield call(axios.get, `http://localhost:5000/users?email=${email}`);
+      const user = response.data[0];
+
+      if (user) {
+        const updatedScore = user.score ? user.score + score : score
+          const updatedUser = { ...user, score: updatedScore };
+
+          yield call(axios.put, `http://localhost:5000/users/${user.id}`, updatedUser);
+
+          const leaderboardResponse = yield call(axios.get, "http://localhost:5000/users")
+          console.log(leaderboardResponse)
+          // const sortedLeaderboard = leaderboardResponse.data.sort
+
+          // yield put({ type: FETCH_LEADERBOARD_REQUEST }); // Refresh leaderboard
+      }
+  } catch (error) {
+      console.error("Score update failed:", error);
+  }
+}
 
 export function* watchLogin(){
     yield takeLatest(LOGIN_REQUEST, loginUserSaga)
     yield takeLatest(FETCH_LEADERBOARD_REQUEST, fetchLeaderboardSaga)
     yield takeLatest(SIGNUP_USER_REQUEST, signupUserSaga);
+    yield takeLatest(UPDATE_USER_SCORE, updateUserScoreSaga);
 }
 

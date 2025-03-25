@@ -6,6 +6,7 @@ import {
     LOGIN_SUCCESS,
     LOGIN_FAILURE,
     UPDATE_SCORE,
+    UPDATE_USER_SCORE,
     UPDATE_LEADERBOARD,
     FETCH_LEADERBOARD_SUCCESS,
     LOGOUT_USER
@@ -52,6 +53,7 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 user: action.payload || {},
+                isAuthenticated: true
             };
         case LOGIN_FAILURE:
             return {
@@ -59,23 +61,60 @@ const userReducer = (state = initialState, action) => {
                 loading: false,
                 error: action.payload,
             }
-        case "UPDATE_SCORE":
+
+        // Current reducer code
+        // case "UPDATE_USER_SCORE":
+        //     return {
+        //         ...state,
+        //         user: {
+        //             ...state.user,
+        //             score: action.payload.score
+        //         },
+        //         leaderboard: state.leaderboard.map(user =>
+        //             user.email === action.payload.email
+        //                 ? { ...user, score: action.payload.score }
+        //                 : user
+        //         )
+        //     };
+
+        case UPDATE_USER_SCORE: {
+            // const updatedLeaderboard = state.leaderboard.map(user =>
+            //     user.email === action.payload.email
+            //         ? { ...user, score: action.payload.score }
+            //         : user
+            // );
             return {
-                ...state,
-                user: {
+                 ...state,
+                 user :  {
                     ...state.user,
-                    score: action.payload
-                }
+                    score: action.payload.score
+                 }
             };
-        case "UPDATE_LEADERBOARD":
+        }
+
+        case UPDATE_SCORE:
             return {
                 ...state,
-                leaderboard: action.payload
+                score: action.payload
             };
+        // case UPDATE_LEADERBOARD:
+        //     return {
+        //         ...state,
+        //         leaderboard: action.payload
+        //     };
+        // case UPDATE_LEADERBOARD: {
+        //     const sortedLeaderboard = [...action.payload].sort((a, b) => {
+        //         if (b.score !== a.score) return b.score - a.score;
+        //         return new Date(b.updatedAt) - new Date(a.updatedAt);
+        //     });
+        //     console.log(sortedLeaderboard)
+        //     return { ...state, leaderboard: sortedLeaderboard };
+        // }
         case FETCH_LEADERBOARD_SUCCESS:
             return {
                 ...state,
-                leaderboard: action.payload, // Store sorted leaderboard data
+                leaderboard: action.payload,
+                loading: false
             };
         case LOGOUT_USER:
             return {

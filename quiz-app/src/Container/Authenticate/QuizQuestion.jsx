@@ -18,11 +18,21 @@ const QuizQuestion = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const {user} = useSelector((state) => state.user);
+    const { scoreSaveCompleted } = useSelector((state) => state.user);
     const { score, questions, currentQuestIndex, selectedOption, loading, error } = useSelector((state) => state.quiz);
 
     useEffect(() => {
         dispatch(fetchQuestions());
     }, [dispatch]);
+
+    useEffect(() => {
+        if (scoreSaveCompleted) {
+          dispatch(resetQuiz());
+          navigate('/leaderboard');
+          // Reset the completion flag
+          dispatch({ type: "RESET_SCORE_SAVE_FLAG" });
+        }
+      }, [scoreSaveCompleted, dispatch, navigate]);
 
     const handleOptionSelect = (index) => {
         dispatch(setSelectedOption(index));
@@ -34,52 +44,39 @@ const QuizQuestion = () => {
         }
     };
 
-    // const handleNext = () => {
-    //     if (currentQuestIndex < questions.length) {
-    //         const currentQuestion = questions[currentQuestIndex];
-    //         const correctAnswer = currentQuestion.correctAnswer;
-    //         const selectedAnswer = currentQuestion.options[selectedOption];
-
-    //         if (selectedAnswer === correctAnswer) {
-    //             dispatch(updateScore(1));
-    //             console.log("Correct answer!!");
-    //         }
-
-    //         if (currentQuestIndex < questions.length - 1) {
-    //             dispatch(setCurrentQuestIndex(currentQuestIndex + 1));
-    //         } else {
-    //             dispatch(saveUserScore(users, score + 1)); 
-    //             // dispatch(resetQuiz());
-    //             navigate('/leaderboard');
-    //         }
-    //     }
-    // };
-
     const handleNext = () => {
         if(selectedOption === null){
-            alert("Please select an option before proceeding.")
-            return;
+          alert("Please select an option before proceeding.")
+          return;
         }
-        if (currentQuestIndex < questions.length) {
-            const currentQuestion = questions[currentQuestIndex];
-            const correctAnswer = currentQuestion.correctAnswer;
-            const selectedAnswer = currentQuestion.options[selectedOption];
-    
-            if (selectedAnswer === correctAnswer) {
-                dispatch(updateScore(2));
-                console.log("Correct answer!!");
-            }
-    
-            if (currentQuestIndex < questions.length - 1) {
-                dispatch(setCurrentQuestIndex(currentQuestIndex + 1));
-            } else {
-                dispatch(saveUserScore(user, score))
-                console.log(saveUserScore)
-                dispatch(resetQuiz())
+        
+        const currentQuestion = questions[currentQuestIndex];
+        const isCorrect = currentQuestion.options[selectedOption] === currentQuestion.correctAnswer;
+      
+        // Set score directly for this session
+        const newScore = isCorrect ? score + 2 : score;
+
+        console.log(currentQuestIndex);
+        console.log(score)
+        console.log(newScore)
+        
+        if (currentQuestIndex < questions.length - 1) {
+          dispatch(setCurrentQuestIndex(currentQuestIndex + 1));
+          dispatch(setSelectedOption(null))
+          dispatch(updateScore(isCorrect ? 2 : 0)); // Update with new value
+          
+        } else {
+            try {
+                dispatch(saveUserScore(user, newScore)); // Wait for the score to save
+                
+                dispatch(resetQuiz());
                 navigate('/leaderboard');
+            } catch (error) {
+                console.error("Failed to save score:", error);
+                // Handle error (e.g., show a message)
             }
         }
-    };
+      };
 
     return (
         <div className="quiz-container">
@@ -125,6 +122,7 @@ const QuizQuestion = () => {
                                     Previous
                                 </button>
                             )}
+
 
                             <button
                                 className="submit-button"

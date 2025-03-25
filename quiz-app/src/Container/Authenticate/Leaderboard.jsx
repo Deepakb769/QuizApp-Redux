@@ -1,37 +1,63 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import '../../assets/styles/leaderboard.css';
 import First from '../../assets/images/Group 6.png';
 import Second from '../../assets/images/Group 5.png';
 import Third from '../../assets/images/Group 4.png';
-import { FETCH_LEADERBOARD_REQUEST, logoutUser, updateUserScore } from '../../store/users/userActions';
+import axios from 'axios';
+// import { saveUserScore } from '../../store/questions/questionAction';
+import { FETCH_LEADERBOARD_REQUEST, logoutUser, updateUserScore, fetchLeaderboardSuccess, UPDATE_LEADERBOARD } from '../../store/users/userActions';
 import { useNavigate } from 'react-router-dom';
 import { saveUserScore } from '../../store/questions/questionAction';
 
 const Leaderboard = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { user, score, leaderboard = [] } = useSelector((state) => state.user);
-    
-    // Get user rank from server data
-    const sortedLeaderboard = [...leaderboard].sort((a, b) => b.score - a.score);
-    const userRank = sortedLeaderboard.findIndex(u => u.email === user?.email) + 1;
+    const { score } = useSelector((state) => state.quiz)
+    const { user, leaderboard = [], loading } = useSelector((state) => state.user);
+    const [sortedLeaderboard, setSortedLeaderboard] = useState([]);
 
+
+    useEffect(() => {
+        console.log("Current leaderboard data:", leaderboard);
+        console.log("Current user data:", user);
+        console.log("Current user obtained:",score)
+
+        const sorted = [...leaderboard].sort((a, b) => {
+          // Primary sort: score descending
+          
+          if (b.score !== a.score) return b.score - a.score;
+          
+          // Secondary sort: recent updates first
+          return new Date(b.updatedAt) - new Date(a.updatedAt);
+        });
+        
+        console.log(sorted)
+        setSortedLeaderboard(sorted);
+        console.log(sortedLeaderboard)
+      }, [leaderboard, score]);
+
+    
+    const userRank = sortedLeaderboard.findIndex(u => u.email === user?.email);
+    const displayRank = userRank >= 0 ? userRank + 1 : "N/A";
+
+    const rankSuffix = userRank === 1 ? 'st' : userRank === 2 ? 'nd' : userRank === 3 ? 'rd' : 'th'; 
 
     useEffect(() => {
         dispatch({ type: FETCH_LEADERBOARD_REQUEST });
-    }, [dispatch]);
+    }, [dispatch, score]);
 
-    // useEffect(() => {
-    //     if(user?.email){
-    //         dispatch(updateUserScore(user.email, 0))
-    //     }
-    // },[user?.email, dispatch])
 
     useEffect(() => {
-        if (user?.email && score > 0) {
-            dispatch(saveUserScore(user, score));
+        const updateScoreAndLeaderboard = async () => {
+            if (user?.email && score > 0) {
+                await dispatch(saveUserScore(user, score));
+                dispatch({ type: FETCH_LEADERBOARD_REQUEST });
+                console.log(user, score)
+                console.log(saveUserScore)
+            }
         }
+        updateScoreAndLeaderboard();
     }, [score, user?.email, dispatch]);
 
     const handleLogout = () => {
@@ -39,38 +65,79 @@ const Leaderboard = () => {
         navigate('/login');
     }
 
+//     // useEffect(() => {
+//     //     if (leaderboard.length > 0) {
+//     //         const sorted = [...leaderboard].sort((a, b) => {
+//     //             if (b.score !== a.score) return b.score - a.score;
+//     //             return new Date(b.updatedAt) - new Date(a.updatedAt);
+//     //         });
+
+//     //         setSortedLeaderboard(sorted);
+//     //         dispatch(fetchLeaderboardSuccess(sorted)); 
+//     //         dispatch({ type: UPDATE_LEADERBOARD, payload: sorted }); 
+//     //     }
+//     // }, [leaderboard, dispatch]);
+
+//     // useEffect(() => {
+//     //     let isMounted = true;
+//     //     const updateScoreAndLeaderboard = async () => {
+//     //       if (isMounted && user?.email && score > 0) {
+//     //         await dispatch(saveUserScore(user, score));
+//     //         dispatch({ type: FETCH_LEADERBOARD_REQUEST });
+//     //       }
+//     //     };
+//     //     updateScoreAndLeaderboard();
+//     //     console.log(score)
+//     //     return () => { isMounted = false };
+//     //   }, [score, user?.email, dispatch]);
+
+//     // if (loading) {
+//     //     return <div className="loading">Loading leaderboard...</div>;
+//     // }
+
     return (
         <div className='leaderboard-container'>
             <div className="toppers-card">
-                <h4>{`Wow! You Rank ${userRank}${userRank === 1 ? 'st' : userRank === 2 ? 'nd' : userRank === 3 ? 'rd' : 'th'}`}</h4>
-                <p>Congratulations on your score!</p>
-                
+                {/* <h4>{`Wow! You Rank ${userRank}${userRank === 1 ? 'st' : userRank === 2 ? 'nd' : userRank === 3 ? 'rd' : 'th'}`}</h4>
+                <p>Congratulations on your score!</p> */}
+                {user && (<h4>{`Wow ${user.firstName}! You Rank ${userRank}${rankSuffix}`}</h4>)}
+                <p>Congratulations on your score of {user.score}!</p>
+
                 <div className="rank-card leading-normal">
+                    {/* Rank 2 */}
                     <div className='leading-normal' id="rank-2">
                         <img src={Second} alt="Second Place" />
                         <h4>#2</h4>
                         <h5>Score</h5>
-                        <p>{leaderboard[1]?.score || 0}</p>
+                        {/* <pre>
+                        <p>{JSON.stringify(sortedLeaderboard, null, 2)}</p>
+                        </pre> */}
+                        <p>{sortedLeaderboard[1]?.score || 0}</p> {/* Use sorted array */}
                     </div>
+
+                    {/* Rank 1 */}
                     <div id="rank-1">
                         <img src={First} alt="First Place" />
                         <h5>Score</h5>
-                        <p>{leaderboard[0]?.score || 0}</p>
+                        <p>{sortedLeaderboard[0]?.score || 0}</p> {/* Use sorted array */}
                     </div>
+
+                    {/* Rank 3 */}
                     <div id="rank-3">
                         <img src={Third} alt="Third Place" />
                         <h4>#3</h4>
                         <h5>Score</h5>
-                        <p>{leaderboard[2]?.score || 0}</p>
+                        <p>{sortedLeaderboard[2]?.score || 0}</p> {/* Use sorted array */}
                     </div>
                 </div>
+
             </div>
             <div className="rank-rows">
-                {leaderboard.slice(7).map((user, index) => (
-                    <div key={index} id={`rank-${index + 4}`}>
-                        <h3>#{index + 4}</h3>
-                        <h5>{user.firstName}</h5>
-                        <h3>{user.score}</h3>
+            {sortedLeaderboard.slice(3).map((userEntry, index) => (
+                    <div className="participant" key={userEntry.id}>
+                        <span className="rank">#{index + 4}</span>
+                        <span className="name">{userEntry.firstName}</span>
+                        <span className="score">{userEntry.score || 0}</span>
                     </div>
                 ))}
             </div>

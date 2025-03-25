@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 const ProgressBar = () => {
     const {currentQuestIndex, questions} = useSelector((state) => state.quiz)
-    const progress = ((currentQuestIndex + 1)/ questions.length) * 100;
+    const progress = ((currentQuestIndex)/ questions.length) * 100;
 
   return (
     <>
