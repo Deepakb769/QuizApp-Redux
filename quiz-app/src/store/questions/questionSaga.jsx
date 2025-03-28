@@ -29,29 +29,27 @@ function* handleFetchQuestions() {
 function* handleSaveUserScore(action) {
   try {
     const { user, score } = action.payload;
-    
+
     // 1. Fetch current user data
     const { data: users } = yield call(
       axios.get,
       `http://localhost:5000/users?email=${user.email}`
     );
 
-    if (!users.length) {
-      console.warn("User not found in database");
-      return;
+    if (users.length) {
+      const currentUser = users[0];
+
+      // 2. Update user score on server
+      yield call(
+        axios.patch,
+        `http://localhost:5000/users/${currentUser.id}`,
+        {
+          score,
+          updatedAt: new Date().toISOString()
+        }
+      );
+      console.log(`Updated score for ${user.email}: ${score}`);
     }
-
-    const currentUser = users[0];
-
-    // 2. Update user score on server
-    yield call(
-      axios.patch,
-      `http://localhost:5000/users/${currentUser.id}`,
-      {
-        score,
-        updatedAt: new Date().toISOString()
-      }
-    );
 
     // Brief delay to ensure data persistence
     yield call(delay, 500);
@@ -67,6 +65,7 @@ function* handleSaveUserScore(action) {
         score: score
       }
     });
+    yield put(fetchLeaderboardRequest())
     yield put({ type: "SAVE_USER_SCORE_COMPLETED" });
 
   } catch (error) {

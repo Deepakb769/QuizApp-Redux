@@ -68,8 +68,7 @@ const QuizQuestion = () => {
         } else {
             try {
                 dispatch(saveUserScore(user, newScore)); // Wait for the score to save
-                
-                dispatch(resetQuiz());
+                // dispatch(resetQuiz());
                 navigate('/leaderboard');
             } catch (error) {
                 console.error("Failed to save score:", error);

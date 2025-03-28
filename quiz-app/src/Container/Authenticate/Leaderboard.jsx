@@ -8,7 +8,7 @@ import axios from 'axios';
 // import { saveUserScore } from '../../store/questions/questionAction';
 import { FETCH_LEADERBOARD_REQUEST, logoutUser, updateUserScore, fetchLeaderboardSuccess, UPDATE_LEADERBOARD } from '../../store/users/userActions';
 import { useNavigate } from 'react-router-dom';
-import { saveUserScore } from '../../store/questions/questionAction';
+import { saveUserScore, resetQuiz } from '../../store/questions/questionAction';
 
 const Leaderboard = () => {
     const dispatch = useDispatch();
@@ -35,7 +35,7 @@ const Leaderboard = () => {
         console.log(sorted)
         setSortedLeaderboard(sorted);
         console.log(sortedLeaderboard)
-      }, [leaderboard, score]);
+        }, [leaderboard, score]);
 
     
     const userRank = sortedLeaderboard.findIndex(u => u.email === user?.email);
@@ -48,52 +48,23 @@ const Leaderboard = () => {
     }, [dispatch, score]);
 
 
-    useEffect(() => {
-        const updateScoreAndLeaderboard = async () => {
-            if (user?.email && score > 0) {
-                await dispatch(saveUserScore(user, score));
-                dispatch({ type: FETCH_LEADERBOARD_REQUEST });
-                console.log(user, score)
-                console.log(saveUserScore)
-            }
-        }
-        updateScoreAndLeaderboard();
-    }, [score, user?.email, dispatch]);
+    // useEffect(() => {
+    //     const updateScoreAndLeaderboard = async () => {
+    //         if (user?.email && score > 0) {
+    //             await dispatch(saveUserScore(user, score));
+    //             dispatch({ type: FETCH_LEADERBOARD_REQUEST });
+    //             console.log(user, score)
+    //             console.log(saveUserScore)
+    //         }
+    //     }
+    //     updateScoreAndLeaderboard();
+    // }, [score, user?.email, dispatch]);
 
     const handleLogout = () => {
         dispatch(logoutUser());
+
         navigate('/login');
     }
-
-//     // useEffect(() => {
-//     //     if (leaderboard.length > 0) {
-//     //         const sorted = [...leaderboard].sort((a, b) => {
-//     //             if (b.score !== a.score) return b.score - a.score;
-//     //             return new Date(b.updatedAt) - new Date(a.updatedAt);
-//     //         });
-
-//     //         setSortedLeaderboard(sorted);
-//     //         dispatch(fetchLeaderboardSuccess(sorted)); 
-//     //         dispatch({ type: UPDATE_LEADERBOARD, payload: sorted }); 
-//     //     }
-//     // }, [leaderboard, dispatch]);
-
-//     // useEffect(() => {
-//     //     let isMounted = true;
-//     //     const updateScoreAndLeaderboard = async () => {
-//     //       if (isMounted && user?.email && score > 0) {
-//     //         await dispatch(saveUserScore(user, score));
-//     //         dispatch({ type: FETCH_LEADERBOARD_REQUEST });
-//     //       }
-//     //     };
-//     //     updateScoreAndLeaderboard();
-//     //     console.log(score)
-//     //     return () => { isMounted = false };
-//     //   }, [score, user?.email, dispatch]);
-
-//     // if (loading) {
-//     //     return <div className="loading">Loading leaderboard...</div>;
-//     // }
 
     return (
         <div className='leaderboard-container'>
