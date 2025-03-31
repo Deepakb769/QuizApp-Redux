@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import '../../assets/styles/quizquestion.css';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,10 +20,15 @@ const QuizQuestion = () => {
     const {user} = useSelector((state) => state.user);
     const { scoreSaveCompleted } = useSelector((state) => state.user);
     const { score, questions, currentQuestIndex, selectedOption, loading, error } = useSelector((state) => state.quiz);
+    const [correctAnswers , setCorrectAnswers] = useState([]);
 
     useEffect(() => {
         dispatch(fetchQuestions());
     }, [dispatch]);
+
+    useEffect(() => {
+        console.log("Questions in Redux:", questions); // Debugging line
+    }, [questions]);
 
     useEffect(() => {
         if (scoreSaveCompleted) {
@@ -36,6 +41,13 @@ const QuizQuestion = () => {
 
     const handleOptionSelect = (index) => {
         dispatch(setSelectedOption(index));
+
+        const isCorrect = questions[currentQuestIndex].options[index] === questions[currentQuestIndex].correctAnswer;
+        setCorrectAnswers((prev) => {
+            const updated = [...prev];
+            updated[currentQuestIndex] = isCorrect ? 2 : 0; // Store 2 points for correct, 0 for incorrect
+            return updated;
+        });
     };
 
     const handlePrev = () => {
@@ -44,38 +56,68 @@ const QuizQuestion = () => {
         }
     };
 
-    const handleNext = () => {
-        if(selectedOption === null){
-          alert("Please select an option before proceeding.")
-          return;
-        }
+    // const handleNext = () => {
+    //     if(selectedOption === null){
+    //       alert("Please select an option before proceeding.")
+    //       return;
+    //     }
+
+    //     dispatch(setSelectedOption(selectedOption));
         
+    //     const currentQuestion = questions[currentQuestIndex];
+    //     const isCorrect = currentQuestion.options[selectedOption] === currentQuestion.correctAnswer;
+      
+    //     // Set score directly for this session
+    //     const newScore = isCorrect ? score + 2 : score;
+
+    //     console.log(currentQuestIndex);
+    //     console.log(score)
+    //     console.log(newScore)
+        
+    //     if (currentQuestIndex < questions.length - 1) {
+    //       dispatch(setCurrentQuestIndex(currentQuestIndex + 1));    
+    //     //   dispatch(setSelectedOption(null))
+    //     //   dispatch(updateScore(isCorrect ? 2 : 0)); // Update with new value
+          
+    //     } else {
+    //         try {
+
+    //             dispatch(saveUserScore(user, newScore)); // Wait for the score to save
+    //             // dispatch(resetQuiz());
+    //             navigate('/leaderboard');
+    //         } catch (error) {
+    //             console.error("Failed to save score:", error);
+    //             // Handle error (e.g., show a message)
+    //         }
+    //     }
+    //   };
+
+    const handleNext = () => {
+        if (selectedOption === null) {
+            alert("Please select an option before proceeding.");
+            return;
+        }
+
         const currentQuestion = questions[currentQuestIndex];
         const isCorrect = currentQuestion.options[selectedOption] === currentQuestion.correctAnswer;
-      
-        // Set score directly for this session
-        const newScore = isCorrect ? score + 2 : score;
 
-        console.log(currentQuestIndex);
-        console.log(score)
-        console.log(newScore)
+        dispatch(updateScore(isCorrect ? 2 : 0)); // Update score in Redux
         
+        // const updateScore = isCorrect ? score+2 : score; 
+        // dispatch(setSelectedOption(null)); // Store current selection
+    
         if (currentQuestIndex < questions.length - 1) {
-          dispatch(setCurrentQuestIndex(currentQuestIndex + 1));
-          dispatch(setSelectedOption(null))
-          dispatch(updateScore(isCorrect ? 2 : 0)); // Update with new value
-          
+            dispatch(setCurrentQuestIndex(currentQuestIndex + 1));
+            // dispatch(updateScore(isCorrect ? 2 : 0)); // Update with new value
         } else {
-            try {
-                dispatch(saveUserScore(user, newScore)); // Wait for the score to save
-                // dispatch(resetQuiz());
-                navigate('/leaderboard');
-            } catch (error) {
-                console.error("Failed to save score:", error);
-                // Handle error (e.g., show a message)
-            }
+            
+            // const totalScore = correctAnswers.reduce((sum,points) => sum + points, 0)
+            // console.log("Total Score:", totalScore);
+            dispatch(saveUserScore(user, score));
+            navigate('/leaderboard');
         }
-      };
+    };
+    
 
     return (
         <div className="quiz-container">

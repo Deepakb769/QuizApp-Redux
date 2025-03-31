@@ -17,7 +17,7 @@ import {
 const initialState = {
     questions: [],
     currentQuestIndex: 0,
-    selectedOption: null,
+    selectedOption: {},
     score: 0,
     loggedInUser: null,
     loading: false,
@@ -36,12 +36,23 @@ const questionReducer = (state = initialState, action) => {
             return { ...state, loading: false, error: action.payload };
         case SET_CURRENT_QUEST_INDEX:
             return { ...state, currentQuestIndex: action.payload, selectedOption: null };
+        // case SET_SELECTED_OPTION:
+        //     return { ...state, selectedOption: action.payload};
         case SET_SELECTED_OPTION:
-            return { ...state, selectedOption: action.payload};
+            // const updatedOptions = [...state.selectedOption];
+            // updatedOptions[state.currentQuestIndex] = action.payload;
+            return { 
+                ...state,
+                selectedOption: action.payload,
+                // {
+                //     ...state.selectedOption,
+                //     [state.currentQuestIndex]: action.payload
+                // },
+                };
         case USER_SCORE_REQUEST:
             return { ...state, loading: true, error: null };
         case USER_SCORE_SUCCESS:
-            return { ...state, score : action.payload.score, scoreSaveCompleted: true }
+            return { ...state, score : action.payload, scoreSaveCompleted: true }
         case USER_SCORE_FAILED:
             return {...state, loading: false, error: action.payload, scoreSaveCompleted: false }
         case UPDATE_SCORE:
@@ -49,12 +60,12 @@ const questionReducer = (state = initialState, action) => {
         case SET_LOGGED_IN_USER:
             return { ...state, loggedInUser: action.payload };
         case RESET_QUIZ:
-            return { ...state, score : 0, currentQuestIndex: 0, selectedOption: null };
-            case "SAVE_USER_SCORE_COMPLETED":
-                return {
-                  ...state,
-                  scoreSaveCompleted: true
-                };
+            return { ...state, score : 0, currentQuestIndex: 0, selectedOption: {} };
+            // case "SAVE_USER_SCORE_COMPLETED":
+            //     return {
+            //       ...state,
+            //       scoreSaveCompleted: true
+            //     };
               
               case "SAVE_USER_SCORE_FAILED":
                 return {

@@ -4,57 +4,56 @@
       "id": "684d",
       "firstName": "Shraddha",
       "email": "shradha234@gmail.com",
-      "password": "rewq432%#",
-      "score": 0
+      "password": "rewq432%#"
     },
     {
       "id": "e92d",
       "firstName": "Deepak",
       "email": "deepakbohora01@gmail.com",
-      "password": "Abts321@",
-      "score": 0
+      "password": "Abts321@"
     },
     {
       "id": "b166",
       "firstName": "Parikshit",
       "email": "pari321@gmail.com",
-      "password": "apri45$%",
-      "score": 0
+      "password": "apri45$%"
     },
     {
       "id": "21ba",
       "firstName": "Gopal",
       "email": "gopi67@gmail.com",
-      "password": "golm90&*",
-      "score": 0
+      "password": "golm90&*"
     },
     {
       "id": "1b1e",
       "firstName": "Sham",
       "email": "sam45@gmail.com",
-      "password": "sommer45##",
-      "score": 0
+      "password": "sommer45##"
     },
     {
       "id": "1a41",
       "firstName": "Mehboob",
       "email": "mehboob32@gmail.com",
-      "password": "qasw67@",
-      "score": 0
+      "password": "qasw67@"
+      
     },
     {
       "id": "074a",
       "firstName": "Govind",
       "email": "govind123@gmail.com",
-      "password": "xyz54##",
-      "score": 0
+      "password": "xyz54##"
     },
     {
       "id": "7166",
       "firstName": "Manish",
       "email": "manish54@gmail.com",
-      "password": "uio90$%",
-      "score": 0
+      "password": "uio90$%"
+    },
+    {
+      "id": "4504",
+      "firstName": "Virat",
+      "email": "virat908@gmail.com",
+      "password": "and34()"
     }
   ],
   "questions": [

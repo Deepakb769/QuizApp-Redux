@@ -74,7 +74,7 @@ function* updateUserScoreSaga(action) {
       const { email, score } = action.payload;
       const response = yield call(axios.get, `http://localhost:5000/users?email=${email}`);
       const user = response.data[0];
-
+      
       if (user) {
         const updatedScore = user.score ? user.score + score : score
           const updatedUser = { ...user, score: updatedScore };

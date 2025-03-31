@@ -78,17 +78,18 @@ const userReducer = (state = initialState, action) => {
         //     };
 
         case UPDATE_USER_SCORE: {
-            // const updatedLeaderboard = state.leaderboard.map(user =>
-            //     user.email === action.payload.email
-            //         ? { ...user, score: action.payload.score }
-            //         : user
-            // );
+            const updatedLeaderboard = state.leaderboard.map(user =>
+                user.email === action.payload.email
+                    ? { ...user, score: action.payload.score }
+                    : user
+            );
             return {
                  ...state,
                  user :  {
                     ...state.user,
                     score: action.payload.score
-                 }
+                 },
+                leaderboard: updatedLeaderboard,
             };
         }
 
@@ -111,9 +112,20 @@ const userReducer = (state = initialState, action) => {
         //     return { ...state, leaderboard: sortedLeaderboard };
         // }
         case FETCH_LEADERBOARD_SUCCESS:
+            const currentUserEmail = state.user?.email;
+            let updatedUser = state.user;
+
+            if(currentUserEmail){
+                const leaderboardUser = action.payload.find(user => user.email === currentUserEmail);
+                if(leaderboardUser){
+                    updatedUser = {...state.user ,...leaderboardUser}
+                }
+            }
+            
             return {
                 ...state,
                 leaderboard: action.payload,
+                user: updatedUser,
                 loading: false
             };
         case LOGOUT_USER:
