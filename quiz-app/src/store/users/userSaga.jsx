@@ -6,7 +6,11 @@ import axios from "axios";
 
 function* signupUserSaga(action) {
   try {
-    const response = yield call(axios.post, `http://localhost:5000/users`, action.payload);
+    const userData = {
+      ...action.payload,
+      score: 0 
+    };
+    const response = yield call(axios.post, `http://localhost:5000/users`, userData);
     yield put(signupUserSuccess(response.data));
   } catch (error) {
     yield put(signupUserFailure(error.message));
@@ -79,7 +83,7 @@ function* updateUserScoreSaga(action) {
         const updatedScore = user.score ? user.score + score : score
           const updatedUser = { ...user, score: updatedScore };
 
-          yield call(axios.put, `http://localhost:5000/users/${user.id}`, updatedUser);
+          yield call(axios.put, `http://localhost:5000/users/${user.id}`,updatedUser);
 
           const leaderboardResponse = yield call(axios.get, "http://localhost:5000/users")
           console.log(leaderboardResponse)

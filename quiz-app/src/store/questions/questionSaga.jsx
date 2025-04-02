@@ -39,36 +39,36 @@
 
       if (users.length) {
         const currentUser = users[0];
+        const newTotalScore = currentUser.score + score; // Calculate new total score
 
         // 2. Update user score on server
         yield call(
           axios.patch,
           `http://localhost:5000/users/${currentUser.id}`,
           {
-            score : score,
+            score : newTotalScore,
             updatedAt: new Date().toISOString()
           }
         );
         console.log(score);
       }
 
-      // Brief delay to ensure data persistence
-      // yield call(delay, 500);
-
       // 3. Refresh leaderboard data
       yield put(fetchLeaderboardRequest());
+      
 
       // 4. Update local user state
       yield put({
         type: "USER_SCORE_REQUEST",  //Define the action of 
         payload: {
-          // email: user.email,
-          score
+          email: user.email,
+          score : newTotalScore
         }
       });
       yield put(fetchLeaderboardRequest())
-      // yield put({ type: "SAVE_USER_SCORE_COMPLETED" });
-      yield put({ type: "USER_SCORE_SUCCESS", payload : score });
+      yield put({ type: "FETCH_LEADERBOARD_REQUEST" });
+      
+      yield put({ type: "USER_SCORE_SUCCESS" });
 
     } catch (error) {
       yield put({ type: "USER_SCORE_FAILURE", error });

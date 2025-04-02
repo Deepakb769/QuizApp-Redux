@@ -7,6 +7,7 @@ import {
     LOGIN_FAILURE,
     UPDATE_SCORE,
     UPDATE_USER_SCORE,
+    UPDATE_USER_SCORE_SUCCESS,
     UPDATE_LEADERBOARD,
     FETCH_LEADERBOARD_SUCCESS,
     LOGOUT_USER
@@ -52,7 +53,7 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                user: action.payload || {},
+                user: { score: 0, ...action.payload },
                 isAuthenticated: true
             };
         case LOGIN_FAILURE:
@@ -84,14 +85,24 @@ const userReducer = (state = initialState, action) => {
                     : user
             );
             return {
-                 ...state,
-                 user :  {
+                ...state,
+                user: {
                     ...state.user,
-                    score: action.payload.score
-                 },
+                    score: action.payload.score //  Update the user's score in the state
+                },
                 leaderboard: updatedLeaderboard,
             };
         }
+
+        case 'UPDATE_USER_SCORE_SUCCESS':
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    score: action.payload.score
+                }
+            };
+
 
         case UPDATE_SCORE:
             return {
@@ -112,20 +123,19 @@ const userReducer = (state = initialState, action) => {
         //     return { ...state, leaderboard: sortedLeaderboard };
         // }
         case FETCH_LEADERBOARD_SUCCESS:
-            const currentUserEmail = state.user?.email;
-            let updatedUser = state.user;
+            // const currentUserEmail = state.user?.email;
+            // let updatedUser = state.user;
 
-            if(currentUserEmail){
-                const leaderboardUser = action.payload.find(user => user.email === currentUserEmail);
-                if(leaderboardUser){
-                    updatedUser = {...state.user ,...leaderboardUser}
-                }
-            }
-            
+            // if (currentUserEmail) {
+            //     const leaderboardUser = action.payload.find(user => user.email === currentUserEmail);
+            //     if (leaderboardUser) {
+            //         updatedUser = { ...state.user, ...leaderboardUser }
+            //     }
+            // }
             return {
                 ...state,
                 leaderboard: action.payload,
-                user: updatedUser,
+                user: action.payload.find(u => u.email === state.user?.email) || state.user,
                 loading: false
             };
         case LOGOUT_USER:

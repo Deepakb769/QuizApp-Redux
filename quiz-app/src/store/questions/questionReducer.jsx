@@ -52,7 +52,7 @@ const questionReducer = (state = initialState, action) => {
         case USER_SCORE_REQUEST:
             return { ...state, loading: true, error: null };
         case USER_SCORE_SUCCESS:
-            return { ...state, score : action.payload, scoreSaveCompleted: true }
+            return { ...state, scoreSaveCompleted: true }  //score : action.payload
         case USER_SCORE_FAILED:
             return {...state, loading: false, error: action.payload, scoreSaveCompleted: false }
         case UPDATE_SCORE:
@@ -76,8 +76,9 @@ const questionReducer = (state = initialState, action) => {
         case SAVE_USER_SCORE:
             return{
                 ...state,
-                users : action.payload.user,
-                score : action.payload.score
+                score : state.score + action.payload.score,     // This adds the score to the existing score
+                // users : action.payload.user, //  This overwrites the entire users array
+                // score : action.payload.score // This replaces the score instead of adding
             }
         default:
             return state;

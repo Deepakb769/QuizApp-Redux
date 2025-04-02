@@ -6,16 +6,15 @@ import Second from '../../assets/images/Group 5.png';
 import Third from '../../assets/images/Group 4.png';
 import axios from 'axios';
 // import { saveUserScore } from '../../store/questions/questionAction';
-import { FETCH_LEADERBOARD_REQUEST, logoutUser, updateUserScore, fetchLeaderboardSuccess, UPDATE_LEADERBOARD } from '../../store/users/userActions';
+import { FETCH_LEADERBOARD_REQUEST, logoutUser, updateUserScore, UPDATE_LEADERBOARD } from '../../store/users/userActions';
 import { useNavigate } from 'react-router-dom';
 import { saveUserScore, resetQuiz, fetchLeaderboardRequest } from '../../store/questions/questionAction';
 
 const Leaderboard = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { score } = useSelector((state) => state.quiz)
+    // const { score } = useSelector((state) => state.quiz)
     const { user = {}, leaderboard = [], loading } = useSelector((state) => state.user);
-    const [sortedLeaderboard, setSortedLeaderboard] = useState([]);
 
 
     // useEffect(() => {
@@ -50,11 +49,13 @@ const Leaderboard = () => {
     useEffect(() => {
         dispatch(fetchLeaderboardRequest());
     }, [dispatch]);
+    
 
     useEffect(() => {
         console.log("Updated leaderboard:", leaderboard);
         console.log("Updated user:", user);
-    }, [leaderboard, user]);
+        console.log(score)
+    }, [leaderboard, user, score]);
 
     const userRank = leaderboard.findIndex(u => u.email === user?.email);
     const displayRank = userRank >= 0 ? userRank + 1 : "N/A";
@@ -72,7 +73,7 @@ const Leaderboard = () => {
                 {/* <h4>{`Wow! You Rank ${userRank}${userRank === 1 ? 'st' : userRank === 2 ? 'nd' : userRank === 3 ? 'rd' : 'th'}`}</h4>
                 <p>Congratulations on your score!</p> */}
                 {user && (<h4>{`Wow ${user.firstName}! You Rank ${displayRank}${displayRank === 1 ? 'st' : displayRank === 2 ? 'nd' : displayRank === 3 ? 'rd' : 'th'}`}</h4>)}
-                <p>Congratulations on your score of {user?.score || 0}!</p>
+                <p>Congratulations on your score of {leaderboard?.score || 0}!</p>
 
                 <div className="rank-card leading-normal">
                     {/* Rank 2 */}

@@ -10,6 +10,7 @@ export const UPDATE_SCORE = "UPDATE_SCORE";
 export const FETCH_LEADERBOARD_REQUEST = "FETCH_LEADERBOARD_REQUEST";
 export const FETCH_LEADERBOARD_SUCCESS = "FETCH_LEADERBOARD_SUCCESS";
 export const UPDATE_USER_SCORE = 'UPDATE_USER_SCORE'
+export const UPDATE_USER_SCORE_SUCCESS = 'UPDATE_USER_SCORE_SUCCESS';
 export const UPDATE_LEADERBOARD = "UPDATE_LEADERBOARD";
 export const LOGOUT_USER = "LOGOUT_USER";
 
@@ -96,6 +97,10 @@ export const updateUserScore = (email, score) => ({
   payload: { email, score },
 });
 
+export const updateUserScoreSuccess = (user) => ({
+  type: UPDATE_USER_SCORE_SUCCESS,
+  payload: user,
+})
 
 export const logoutUser = () => {
   return {
