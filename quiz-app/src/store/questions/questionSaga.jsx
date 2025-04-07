@@ -2,10 +2,10 @@
   import axios from 'axios';
   import {
     FETCH_QUESTIONS_REQUEST,
+    // SET_SELECTED_OPTION,
     SAVE_USER_SCORE,
     fetchQuestionsSuccess,
     fetchQuestionsFailure,
-    fetchLeaderboardRequest
   } from './questionAction';
 
   // API endpoints
@@ -26,6 +26,16 @@
     }
   }
 
+  // function* setSelectedOptionSaga(action){
+  //   try{
+  //     const { questionIndex, selectedOption } = action.payload;
+  //     console.log("Setting selected option:", questionIndex, selectedOption);
+  //   }
+  //   catch(error){
+  //     console.error("Error setting selected option:", error);
+  //   }
+  // }
+
   function* handleSaveUserScore(action) {
     try {
       const { user, score } = action.payload;
@@ -39,14 +49,15 @@
 
       if (users.length) {
         const currentUser = users[0];
-        const newTotalScore = currentUser.score + score; // Calculate new total score
+        // const newTotalScore = currentUser.score + score; // Calculate new total score
 
         // 2. Update user score on server
+        console.log("Updating user ID:", currentUser.id);
         yield call(
           axios.patch,
           `http://localhost:5000/users/${currentUser.id}`,
           {
-            score : newTotalScore,
+            score : score,
             updatedAt: new Date().toISOString()
           }
         );
@@ -62,7 +73,7 @@
         type: "USER_SCORE_REQUEST",  //Define the action of 
         payload: {
           email: user.email,
-          score : newTotalScore
+          score : score
         }
       });
       yield put(fetchLeaderboardRequest())
@@ -80,6 +91,10 @@
   export function* watchQuestionRequests() {
     yield takeLatest(FETCH_QUESTIONS_REQUEST, handleFetchQuestions);
   }
+
+  // export function* watchSelectedOption() {
+  //   yield takeLatest(SET_SELECTED_OPTION, setSelectedOptionSaga);
+  // } 
 
   export function* watchUserScoreSaves() {
     yield takeLatest(SAVE_USER_SCORE, handleSaveUserScore);

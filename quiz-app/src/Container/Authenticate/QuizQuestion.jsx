@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     updateScore,
     setCurrentQuestIndex,
-    setSelectedOption,
+    // setSelectedOption,
     resetQuiz,
     fetchQuestions,
     saveUserScore,
@@ -17,10 +17,10 @@ import { toast } from 'react-toastify';
 const QuizQuestion = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const {user} = useSelector((state) => state.user);
-    const { scoreSaveCompleted } = useSelector((state) => state.user);
+    const { user } = useSelector((state) => state.user);
     const { score, questions, currentQuestIndex, selectedOption, loading, error } = useSelector((state) => state.quiz);
-    const [correctAnswers , setCorrectAnswers] = useState([]);
+    
+    const [selectedOptionIndex, setSelectedOptionIndex] = useState({});
 
     useEffect(() => {
         dispatch(fetchQuestions());
@@ -30,24 +30,11 @@ const QuizQuestion = () => {
         console.log("Questions in Redux:", questions); // Debugging line
     }, [questions]);
 
-    useEffect(() => {
-        if (scoreSaveCompleted) {
-          dispatch(resetQuiz());
-          navigate('/leaderboard');
-          // Reset the completion flag
-          dispatch({ type: "RESET_SCORE_SAVE_FLAG" });
-        }
-      }, [scoreSaveCompleted, dispatch, navigate]);
-
     const handleOptionSelect = (index) => {
-        dispatch(setSelectedOption(index));
-
-        const isCorrect = questions[currentQuestIndex].options[index] === questions[currentQuestIndex].correctAnswer;
-        setCorrectAnswers((prev) => {
-            const updated = [...prev];
-            updated[currentQuestIndex] = isCorrect ? 2 : 0; // Store 2 points for correct, 0 for incorrect
-            return updated;
-        });
+        setSelectedOptionIndex(prev => ({
+            ...prev,
+            [currentQuestIndex]: index
+        }))
     };
 
     const handlePrev = () => {
@@ -56,64 +43,32 @@ const QuizQuestion = () => {
         }
     };
 
-    // const handleNext = () => {
-    //     if(selectedOption === null){
-    //       alert("Please select an option before proceeding.")
-    //       return;
-    //     }
-
-    //     dispatch(setSelectedOption(selectedOption));
-        
-    //     const currentQuestion = questions[currentQuestIndex];
-    //     const isCorrect = currentQuestion.options[selectedOption] === currentQuestion.correctAnswer;
-      
-    //     // Set score directly for this session
-    //     const newScore = isCorrect ? score + 2 : score;
-
-    //     console.log(currentQuestIndex);
-    //     console.log(score)
-    //     console.log(newScore)
-        
-    //     if (currentQuestIndex < questions.length - 1) {
-    //       dispatch(setCurrentQuestIndex(currentQuestIndex + 1));    
-    //     //   dispatch(setSelectedOption(null))
-    //     //   dispatch(updateScore(isCorrect ? 2 : 0)); // Update with new value
-          
-    //     } else {
-    //         try {
-
-    //             dispatch(saveUserScore(user, newScore)); // Wait for the score to save
-    //             // dispatch(resetQuiz());
-    //             navigate('/leaderboard');
-    //         } catch (error) {
-    //             console.error("Failed to save score:", error);
-    //             // Handle error (e.g., show a message)
-    //         }
-    //     }
-    //   };
-
     const handleNext = () => {
+        const selectedOption = selectedOptionIndex[currentQuestIndex];
         if (selectedOption === null) {
             alert("Please select an option before proceeding.");
             return;
         }
+        // const currentQuestion = questions[currentQuestIndex];
+        // const isCorrect = currentQuestion.options[selectedOption] === currentQuestion.correctAnswer;
 
-        const currentQuestion = questions[currentQuestIndex];
-        const isCorrect = currentQuestion.options[selectedOption] === currentQuestion.correctAnswer;
-
-        dispatch(updateScore(isCorrect ? 2 : 0)); // Update score in Redux
-        
-        // const updateScore = isCorrect ? score+2 : score; 
-        // dispatch(setSelectedOption(null)); // Store current selection
+        // dispatch(updateScore(isCorrect ? 2 : isCorrect)); // Update score in Redux
+        // console.log(updateScore)
     
         if (currentQuestIndex < questions.length - 1) {
             dispatch(setCurrentQuestIndex(currentQuestIndex + 1));
-            // dispatch(updateScore(isCorrect ? 2 : 0)); // Update with new value
         } else {
-            
-            // const totalScore = correctAnswers.reduce((sum,points) => sum + points, 0)
-            // console.log("Total Score:", totalScore);
-            dispatch(saveUserScore(user, score));
+            let totalScore = 0;
+            questions.forEach((question, index) => {
+                const selected = selectedOptionIndex[index];
+                if (selected !== undefined && question.options[selected] === question.correctAnswer) {
+                    totalScore += 2;
+                }
+            });
+
+            dispatch(updateScore(totalScore)); // Update score in Redux
+            dispatch(saveUserScore(user, totalScore));
+            console.log(saveUserScore(user, totalScore))
             navigate('/leaderboard');
         }
     };
@@ -141,18 +96,18 @@ const QuizQuestion = () => {
                                 {questions[currentQuestIndex]?.options?.map((option, index) => (
                                     <div
                                         key={index}
-                                        className={`option ${selectedOption === index ? 'selected' : ''}`}
+                                        className={`option ${selectedOptionIndex[currentQuestIndex] === index ? 'selected' : ''}`}
                                         onClick={() => handleOptionSelect(index)}
                                     >
                                         <input
                                             type="radio"
                                             name="answer"
                                             id={`option${index}`}
-                                            checked={selectedOption === index}
+                                            checked={selectedOptionIndex[currentQuestIndex] === index}
                                             onChange={() => handleOptionSelect(index)}
                                         />
                                         <label htmlFor={`option${index}`}>
-                                            {index + 1}. {option}
+                                            {index + 1} {option}
                                         </label>
                                     </div>
                                 ))}

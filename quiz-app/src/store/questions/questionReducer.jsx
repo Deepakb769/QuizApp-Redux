@@ -1,10 +1,10 @@
-import { act } from "react";
+
 import {
     FETCH_QUESTIONS_REQUEST,
     FETCH_QUESTIONS_SUCCESS,
     FETCH_QUESTIONS_FAILURE,
     SET_CURRENT_QUEST_INDEX,
-    SET_SELECTED_OPTION,
+    // SET_SELECTED_OPTION,
     USER_SCORE_REQUEST,
     USER_SCORE_SUCCESS,
     USER_SCORE_FAILED,
@@ -22,33 +22,22 @@ const initialState = {
     loggedInUser: null,
     loading: false,
     error: null,
-    users : null,
+    // users : null,
     scoreSaveCompleted: false
 };
 
 const questionReducer = (state = initialState, action) => {
+    console.log("Action Type:", action.type); // Debugging line
     switch (action.type) {
         case FETCH_QUESTIONS_REQUEST:
             return { ...state, loading: true, error: null };
         case FETCH_QUESTIONS_SUCCESS:
             return { ...state, loading: false, questions: action.payload };
+            console.log(FETCH_QUESTIONS_SUCCESS);
         case FETCH_QUESTIONS_FAILURE:
             return { ...state, loading: false, error: action.payload };
         case SET_CURRENT_QUEST_INDEX:
             return { ...state, currentQuestIndex: action.payload, selectedOption: null };
-        // case SET_SELECTED_OPTION:
-        //     return { ...state, selectedOption: action.payload};
-        case SET_SELECTED_OPTION:
-            // const updatedOptions = [...state.selectedOption];
-            // updatedOptions[state.currentQuestIndex] = action.payload;
-            return { 
-                ...state,
-                selectedOption: action.payload,
-                // {
-                //     ...state.selectedOption,
-                //     [state.currentQuestIndex]: action.payload
-                // },
-                };
         case USER_SCORE_REQUEST:
             return { ...state, loading: true, error: null };
         case USER_SCORE_SUCCESS:
@@ -73,13 +62,11 @@ const questionReducer = (state = initialState, action) => {
                   scoreSaveCompleted: false,
                   error: action.error
                 };
-        case SAVE_USER_SCORE:
-            return{
-                ...state,
-                score : state.score + action.payload.score,     // This adds the score to the existing score
-                // users : action.payload.user, //  This overwrites the entire users array
-                // score : action.payload.score // This replaces the score instead of adding
-            }
+        // case SAVE_USER_SCORE:
+        //     return{
+        //         ...state,
+        //         score : state.score + action.payload.score,
+        //     }
         default:
             return state;
     }

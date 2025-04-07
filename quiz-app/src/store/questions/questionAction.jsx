@@ -4,7 +4,7 @@
   export const FETCH_QUESTIONS_SUCCESS = "FETCH_QUESTIONS_SUCCESS";
   export const FETCH_QUESTIONS_FAILURE = "FETCH_QUESTIONS_FAILURE";
   export const SET_CURRENT_QUEST_INDEX = "SET_CURRENT_QUEST_INDEX";
-  export const SET_SELECTED_OPTION = "SET_SELECTED_OPTION";
+  // export const SET_SELECTED_OPTION = "SET_SELECTED_OPTION";
   export const RESET_QUIZ = "RESET_QUIZ";
   export const SET_LOGGED_IN_USER = 'SET_LOGGED_IN_USER';
   export const USER_SCORE_REQUEST = 'USER_SCORE_REQUEST';
@@ -33,10 +33,10 @@
     payload: index
   });
 
-  export const setSelectedOption = (optionIndex) => ({
-    type: SET_SELECTED_OPTION,
-    payload: optionIndex
-  });
+  // export const setSelectedOption = (optionIndex) => ({
+  //   type: SET_SELECTED_OPTION,
+  //   payload: optionIndex
+  // });
 
   export const resetQuiz = () => ({
     type: RESET_QUIZ
@@ -64,9 +64,9 @@
     }
   };
 
-  export const fetchLeaderboardRequest = () => ({
-    type: FETCH_LEADERBOARD_REQUEST,
-  });
+  // export const fetchLeaderboardRequest = () => ({
+  //   type: FETCH_LEADERBOARD_REQUEST,
+  // });
 
   export const saveUserScore = (user, score) => {
     return {

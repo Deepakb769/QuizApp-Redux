@@ -8,36 +8,13 @@ import axios from 'axios';
 // import { saveUserScore } from '../../store/questions/questionAction';
 import { FETCH_LEADERBOARD_REQUEST, logoutUser, updateUserScore, UPDATE_LEADERBOARD } from '../../store/users/userActions';
 import { useNavigate } from 'react-router-dom';
-import { saveUserScore, resetQuiz, fetchLeaderboardRequest } from '../../store/questions/questionAction';
+import { saveUserScore, resetQuiz} from '../../store/questions/questionAction';
 
 const Leaderboard = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    // const { score } = useSelector((state) => state.quiz)
+    const { score } = useSelector((state) => state.quiz)
     const { user = {}, leaderboard = [], loading } = useSelector((state) => state.user);
-
-
-    // useEffect(() => {
-    //     console.log("Current leaderboard data:", leaderboard);
-    //     console.log("Current user data:", user);
-    //     console.log("Current user obtained:",score)
-
-    //     if(leaderboard.length > 0 ){
-
-    //         const sorted = [...leaderboard].sort((a, b) => {
-    //             // Primary sort: score descending
-                
-    //             if (b.score !== a.score) return b.score - a.score;
-                
-    //             // Secondary sort: recent updates first
-    //             return new Date(b.updatedAt) - new Date(a.updatedAt);
-    //         });
-            
-    //         console.log(sorted);
-    //         setSortedLeaderboard(sorted);   
-    //         console.log(sortedLeaderboard)
-    //     }
-    //     }, [leaderboard]);
 
     
     // const userRank = sortedLeaderboard.findIndex(u => u.email === user?.email);
@@ -47,7 +24,7 @@ const Leaderboard = () => {
     // const rankSuffix = userRank === 1 ? 'st' : userRank === 2 ? 'nd' : userRank === 3 ? 'rd' : 'th'; 
 
     useEffect(() => {
-        dispatch(fetchLeaderboardRequest());
+        dispatch({ type : FETCH_LEADERBOARD_REQUEST });
     }, [dispatch]);
     
 
@@ -55,6 +32,8 @@ const Leaderboard = () => {
         console.log("Updated leaderboard:", leaderboard);
         console.log("Updated user:", user);
         console.log(score)
+        console.log(updateUserScore)
+        console.log(saveUserScore(user, score))
     }, [leaderboard, user, score]);
 
     const userRank = leaderboard.findIndex(u => u.email === user?.email);
@@ -65,7 +44,7 @@ const Leaderboard = () => {
         navigate('/login');
     }
 
-    if (loading) return <p>Loading leaderboard...</p>;
+    // if (loading) return <p>Loading leaderboard...</p>;
 
     return (
         <div className='leaderboard-container'>
@@ -73,7 +52,7 @@ const Leaderboard = () => {
                 {/* <h4>{`Wow! You Rank ${userRank}${userRank === 1 ? 'st' : userRank === 2 ? 'nd' : userRank === 3 ? 'rd' : 'th'}`}</h4>
                 <p>Congratulations on your score!</p> */}
                 {user && (<h4>{`Wow ${user.firstName}! You Rank ${displayRank}${displayRank === 1 ? 'st' : displayRank === 2 ? 'nd' : displayRank === 3 ? 'rd' : 'th'}`}</h4>)}
-                <p>Congratulations on your score of {leaderboard?.score || 0}!</p>
+                <p>Congratulations on your score of {user?.score || 0}!</p>
 
                 <div className="rank-card leading-normal">
                     {/* Rank 2 */}

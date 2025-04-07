@@ -64,10 +64,10 @@ export const fetchLeaderboardSuccess = (leaderboard) => ({
   payload: leaderboard,
 });
   
-export const updateLeaderboard = (leaderboard) => ({
-  type: UPDATE_LEADERBOARD,
-  payload: leaderboard,
-});
+// export const updateLeaderboard = (leaderboard) => ({
+//   type: UPDATE_LEADERBOARD,
+//   payload: leaderboard,
+// });
 
 // export const updateUserScore = (email, newScore) => {
 //   return async (dispatch) => {

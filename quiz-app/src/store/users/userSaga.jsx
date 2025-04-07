@@ -45,16 +45,7 @@ function* loginUserSaga(action){
     }
 }
 
-// userSaga.js
-// function* fetchLeaderboardSaga() {
-//     try {
-//       const response = yield call(axios.get, "http://localhost:5000/users");
-//       const sortedData = response.data.sort((a, b) => b.score - a.score);
-//       yield put({ type: "FETCH_LEADERBOARD_SUCCESS", payload: sortedData });
-//     } catch (error) {
-//       console.log("Failed to fetch leaderboard:", error);
-//     }
-//   }
+// userSaga.j
 
 function* fetchLeaderboardSaga() {
   try {
@@ -80,10 +71,10 @@ function* updateUserScoreSaga(action) {
       const user = response.data[0];
       
       if (user) {
-        const updatedScore = user.score ? user.score + score : score
-          const updatedUser = { ...user, score: updatedScore };
+        const updatedScore = user.score ? user.score + score : score // Calculate new total score
+          const updatedUser = { ...user, score: updatedScore, updatedAt: new Date().toISOString() };
 
-          yield call(axios.put, `http://localhost:5000/users/${user.id}`,updatedUser);
+          yield call(axios.patch, `http://localhost:5000/users/${user.id}`,updatedUser);
 
           const leaderboardResponse = yield call(axios.get, "http://localhost:5000/users")
           console.log(leaderboardResponse)
